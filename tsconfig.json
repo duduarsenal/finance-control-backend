@@ -13,6 +13,7 @@
         "@business": ["./src/business/_index.ts"],
         "@repositorys": ["./src/repository/_index.ts"],
         "@routes": ["./src/routes/server-routes.ts"],
+        "@middlewares": ["./src/middleware/_index.ts"],
         "@configs": ["./src/config/_index.ts"],
         "@typings": ["./src/typings.ts"],
         "@enums": ["./src/utils/enum.ts"]

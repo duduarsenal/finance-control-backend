@@ -7,3 +7,14 @@ export enum HttpStatusCode {
     InternalServerError = 500, //Erro interno do servidor
     ServiceUnavailable = 503, //Endpoint indisponivel
 }
+
+export enum HttpExceptionMessage {
+    UserNotFound = "usuario-nao-encontrado", //Usuario nao encontrado e/ou nao existe
+    UserAlreadyExists = "usuario-ja-existe", //Usuario ja cadastrado no sistema
+    MalFormedId = "id-mal-formatado", //Id com formato invalido (diferente de Types.ObjectId)
+    IdNotAllowed = "id-nao-permitido", //Id nao pode estar preenchido (POST ao adicionar novo registro)
+    MissingFields = "campos-obrigatorios-nao-preenchidos", //Campos obrigatorios em branco ou tamanho incorreto
+    UsernameChanged = "nome-de-usuario-alterado", //Usuario enviado nao pode ser diferente do usuario cadastro no sistema baseado no ID
+    EmptyId = "id-nao-preenchido", //Id enviado vazio ou nulo
+    InternalServerError = "erro-interno-servidor", //Erro interno do servidor
+}

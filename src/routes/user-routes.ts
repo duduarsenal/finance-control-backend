@@ -5,10 +5,10 @@ import { UserController } from '@controllers'
 const userRoute = Router()
 
 const _userController = new UserController()
-userRoute.get("/", (req, res) => _userController.getUsers(req, res))
-userRoute.get("/:id", (req, res) => _userController.getUserById(req, res))
-userRoute.post("/", (req, res) => _userController.addUser(req, res))
-userRoute.put("/", (req, res) => _userController.updUser(req, res))
-userRoute.delete("/:id", (req, res) => _userController.delUser(req, res))
+userRoute.get("/", (req, res, next) => _userController.getUsers(req, res, next))
+userRoute.get("/:id", (req, res, next) => _userController.getUserById(req, res, next))
+userRoute.post("/", (req, res, next) => _userController.addUser(req, res, next))
+userRoute.put("/", (req, res, next) => _userController.updUser(req, res, next))
+userRoute.delete("/:id", (req, res, next) => _userController.delUser(req, res, next))
 
 export { userRoute }

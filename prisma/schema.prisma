@@ -12,7 +12,7 @@ model USER {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   // Data
   nome      String
-  usuario   String    @unique
+  usuario   String
   senha     String
   // Log
   dt_add    DateTime? @default(now())
