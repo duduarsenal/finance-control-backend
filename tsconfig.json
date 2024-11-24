@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "target": "es2016",
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
+      "skipLibCheck": true,
+      "paths": {
+        "@": ["./src"],
+        "@controllers": ["./src/controller/_index.ts"],
+        "@services": ["./src/service/_index.ts"],
+        "@business": ["./src/business/_index.ts"],
+        "@repositorys": ["./src/repository/_index.ts"],
+        "@routes": ["./src/routes/server-routes.ts"],
+        "@configs": ["./src/config/_index.ts"],
+        "@typings": ["./src/typings.ts"],
+        "@enums": ["./src/utils/enum.ts"]
+      },
+      "typeRoots": ["@types", "node_modules/@types"],
+      "outDir": "./dist"
+    }
+  }
+  

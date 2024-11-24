@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb" //TIPO de Banco para conexao
+  url      = env("DATABASE_URL") // URL de conexão com o MongoDB
+}
+
+model USER {
+  // Id
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  // Data
+  nome      String
+  usuario   String    @unique
+  senha     String
+  // Log
+  dt_add    DateTime? @default(now())
+  dt_upd    DateTime? 
+  dt_del    DateTime?  
+  ativo     Int?      @default(1)
+}
