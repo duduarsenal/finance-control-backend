@@ -1,11 +1,11 @@
-import { UserModel } from "@configs";
+import { UserModel } from "@configs/zod";
 import { PrismaClient } from "@prisma/client";
 
 const userClient = new PrismaClient().uSER
 
 class UserRepository {
     
-    public async getUsers(){
+    async getUsers(){
         return await userClient.findMany({
             where: {
                 ativo: 1
@@ -19,7 +19,7 @@ class UserRepository {
         })
     }
 
-    public async getUserById(id: string){
+    async getUserById(id: string){
         return await userClient.findUnique({
             where: {
                 id,
@@ -34,7 +34,7 @@ class UserRepository {
         })
     }
 
-    public async getUserByUsuario(usuario: string){
+    async getUserByUsuario(usuario: string){
         return await userClient.findFirst({
             where: {
                 usuario: usuario,
@@ -49,7 +49,7 @@ class UserRepository {
         })
     }
 
-    public async addUser({nome, usuario, senha}: UserModel) {
+    async addUser({nome, usuario, senha}: UserModel) {
         await userClient.create({
             data: {
                 nome: nome,
@@ -59,7 +59,7 @@ class UserRepository {
         })
     }
 
-    public async updUser(id: string, user: UserModel) {
+    async updUser(id: string, user: UserModel) {
         await userClient.update({
             where: {
                 id
@@ -71,7 +71,7 @@ class UserRepository {
         })
     }
     
-    public async delUser(id: string){
+    async delUser(id: string){
         await userClient.update({
             where: {
                 id

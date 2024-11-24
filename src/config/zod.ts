@@ -7,4 +7,4 @@ export const userSchema = z.object({
     senha: z.string({message: "Senha é um campo obrigatório"}).base64({message: "Senha deve estar em formato base64"}),
 });
 
-export type User = z.infer<typeof userSchema>;
+export type UserModel = z.infer<typeof userSchema>;

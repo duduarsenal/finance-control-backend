@@ -1,6 +1,6 @@
-import { UserModel, userSchema } from "@configs";
+import { UserModel, userSchema } from "@configs/zod";
 import { HttpExceptionMessage, HttpStatusCode } from "@enums";
-import { UserRepository } from "@repositorys";
+import { UserRepository } from "@repositorys/user-repository";
 import { Types } from "mongoose";
 import { ZodError } from "zod";
 

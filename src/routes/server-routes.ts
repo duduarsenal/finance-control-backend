@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { userRoute } from "./user-routes";
-import { financeRoute } from "./finance-routes";
+import { userRoute } from "@routes/user-routes";
+import { financeRoute } from "@routes/finance-routes";
 
 const serverRoutes = Router()
 

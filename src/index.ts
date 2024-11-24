@@ -1,8 +1,8 @@
 import express from 'express'
 import cors from 'cors'
-import { serverRoutes } from '@routes'
-import { server_port } from '@configs'
-import { ExceptionMiddleware } from '@middlewares'
+import { serverRoutes } from '@routes/server-routes'
+import { server_port } from '@configs/env'
+import { ExceptionMiddleware } from '@middlewares/exception-middleware'
 
 const server = express()
 

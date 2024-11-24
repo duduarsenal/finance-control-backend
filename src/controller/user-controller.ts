@@ -1,9 +1,9 @@
-import { UserService } from "@services";
+import { UserService } from "@services/user-service";
 import { NextFunction, Request, Response } from "express";
 
 const _userService = new UserService()
 
-class UserController {
+export class UserController {
     
     async getUsers(req: Request, res: Response, next: NextFunction): Promise<any>{
         try {
@@ -60,5 +60,3 @@ class UserController {
         }
     }
 }
-
-export { UserController };
