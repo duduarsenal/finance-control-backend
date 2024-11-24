@@ -3,31 +3,33 @@ import { HttpExceptionMessage, HttpStatusCode } from "@enums";
 import { UserRepository } from "@repositorys/user-repository";
 import { Types } from "mongoose";
 import { UserBusiness } from "@business/user-business";
+import BCRYPT from 'bcrypt'
 
 const _userRepository = new UserRepository()
 const _userBusiness = new UserBusiness()
 
 export class UserService{
+    
     async getUsers(): Promise<{status: HttpStatusCode; data: UserModel[]}>{
         try {
             var usuarios: UserModel[] =  await _userRepository.getUsers()
 
             return ({status: HttpStatusCode.OK, data: usuarios})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, data: error})
+            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
         }
     }
 
     async getUserById(id: string): Promise<{status: HttpStatusCode; data: UserModel | null}>{
         try {
-            if(!Types.ObjectId.isValid(id)) throw({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.MalFormedId})
+            if(!Types.ObjectId.isValid(id)) throw ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.InvalidId})
 
             var usuario = await _userRepository.getUserById(id)
             if(!usuario) throw ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.UserNotFound})
 
             return ({status: HttpStatusCode.OK, data: usuario})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, data: error})
+            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
         }
     }
 
@@ -39,11 +41,14 @@ export class UserService{
             }
 
             const newUser = userSchema.parse(user)
+            const hashPass = await BCRYPT.hash(newUser.senha, 12)
+            newUser.senha = hashPass
+            
             await _userRepository.addUser(newUser)
             
             return ({status: HttpStatusCode.Created, data: "OK"})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, data: error})
+            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
         }
     }
 
@@ -55,11 +60,14 @@ export class UserService{
             }
 
             const userToUpdate = userSchema.parse(userUpdated)
+            const hashPass = await BCRYPT.hash(userToUpdate.senha, 12)
+            userToUpdate.senha = hashPass
+            
             await _userRepository.updUser(id, userToUpdate)
 
             return ({status: HttpStatusCode.OK, data: "OK"})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, data: error})
+            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
         }
     }
 
@@ -74,7 +82,7 @@ export class UserService{
 
             return ({status: HttpStatusCode.OK, data: "OK"})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, data: error})
+            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
         }
     }
 }

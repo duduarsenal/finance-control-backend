@@ -15,7 +15,8 @@
         "@routes/*": ["./src/routes/*"],
         "@middlewares/*": ["./src/middleware/*"],
         "@configs/*": ["./src/config/*"],
-        "@enums": ["./src/utils/enum.ts"]
+        "@enums": ["./src/utils/enum.ts"],
+        "@errors": ["./src/utils/error.ts"]
       },
       "typeRoots": ["@types", "node_modules/@types"],
       "outDir": "./dist"
