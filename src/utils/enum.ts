@@ -1,3 +1,4 @@
+//Status Code padronizadas para quaisquer exceptions do sistema
 export enum HttpStatusCode {
     OK = 200, //Requisicao realizada com sucesso
     Created = 201, //Registro criado com sucesso
@@ -8,6 +9,7 @@ export enum HttpStatusCode {
     ServiceUnavailable = 503, //Endpoint indisponivel
 }
 
+//Mensagens padronizadas para quaisquer exceptions do sistema
 export enum HttpExceptionMessage {
     UserNotFound = "usuario-nao-encontrado", //Usuario nao encontrado e/ou nao existe
     UserAlreadyExists = "usuario-ja-existe", //Usuario ja cadastrado no sistema

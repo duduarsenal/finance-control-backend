@@ -1,6 +1,7 @@
 import { HttpStatusCode } from "@enums";
 import { ZodError } from "zod";
 
+//Handler para as exceptions do tipo zod (formatação e tipagem)
 export class ZodException{
 
     private error: string;
