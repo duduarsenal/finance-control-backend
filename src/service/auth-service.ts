@@ -32,6 +32,19 @@ export class AuthService{
         }
     }
 
+    async refreshToken(usuario: string): Promise<{status: HttpStatusCode, data: string}>{
+        try {
+            const user =  await _userRepository.getUserByUsuario(usuario)
+            if(!user) throw ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.UserNotFound})
+
+            const newToken = await this.getToken(user)
+            
+            return {status: HttpStatusCode.OK, data: newToken}
+        } catch (error: any) {
+            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
+        }
+    }
+
     private async getToken(user: UserModel): Promise<string>{
         const token = JWT.sign({
             data: {

@@ -17,7 +17,7 @@ userRoute.delete("/:id", (req, res, next) => _userController.delUser(req, res, n
 //Private Methods
 // userRoute.get("/", AuthMiddleware, AdminMiddleware, (req, res, next) => _userController.getUsers(req, res, next))
 // userRoute.get("/:id", AuthMiddleware, AdminMiddleware, (req, res, next) => _userController.getUserById(req, res, next))
-userRoute.get("/", (req, res, next) => _userController.getUsers(req, res, next))
+userRoute.get("/", AuthMiddleware, (req, res, next) => _userController.getUsers(req, res, next))
 userRoute.get("/:id", (req, res, next) => _userController.getUserById(req, res, next))
 
 export { userRoute }

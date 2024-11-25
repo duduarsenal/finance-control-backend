@@ -1,3 +1,4 @@
+import { HttpExceptionMessage, HttpStatusCode } from "@enums";
 import { AuthService } from "@services/auth-service";
 import { NextFunction, Request, Response } from "express";
 
@@ -16,7 +17,14 @@ export class AuthController{
     }
 
     async refreshToken(req: Request, res: Response, next: NextFunction){
+        try {
+            const user = req.headers['user'];
+            const { status, data } = await _authService.refreshToken(user as string)
 
+            return res.status(status).json({data})
+        } catch (error: any) {
+            next(error)
+        }
     }
     
 }
