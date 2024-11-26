@@ -7,16 +7,24 @@ datasource db {
   url      = env("DATABASE_URL") // URL de conexão com o MongoDB
 }
 
-model USER {
+model user {
   // Id
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   // Data
   nome      String
   usuario   String
   senha     String
+  role      role      @relation(fields: [role_id], references: [id])
+  role_id   String    @db.ObjectId
   // Log
   dt_add    DateTime? @default(now())
   dt_upd    DateTime? 
   dt_del    DateTime?  
   ativo     Int?      @default(1)
+}
+
+model role {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  descricao String    @unique
+  user      user[]
 }
