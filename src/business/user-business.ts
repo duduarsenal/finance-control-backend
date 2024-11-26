@@ -20,9 +20,7 @@ export class UserBusiness{
             
             return ({status: HttpStatusCode.OK, message: "OK"})
         } catch (error: any) {
-            if(error instanceof ZodError) return new ZodException(error).toResponse()
-            
-            console.error({message: "business-internal-server-error", error})
+            if(error instanceof ZodError) return new ZodException(error)
             return ({status: HttpStatusCode.InternalServerError, message: error.message})
         }
     }
@@ -40,9 +38,7 @@ export class UserBusiness{
              
             return ({status: HttpStatusCode.OK, message: "OK"})
         } catch (error: any) {
-            if(error instanceof ZodError) return new ZodException(error).toResponse()
-
-            console.error({message: "business-internal-server-error", error})
+            if(error instanceof ZodError) return new ZodException(error)
             return ({status: HttpStatusCode.InternalServerError, message: error.message})
         }
     }
@@ -57,7 +53,6 @@ export class UserBusiness{
 
             return ({status: HttpStatusCode.OK, message: "OK"})
         } catch (error: any) {
-            console.error({message: "business-internal-server-error", error})
             return ({status: HttpStatusCode.InternalServerError, message: error.message})
         }
     }

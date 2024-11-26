@@ -1,13 +1,27 @@
 import { HttpStatusCode } from "@enums";
 import { ZodError } from "zod";
 
-//Handler para as exceptions do tipo zod (formatação e tipagem)
-export class ZodException{
+// Handler para as exceptions do aplicativo no geral
+export class AppException extends Error{
 
-    private error: string;
+    public status: number
+
+    constructor(status: number, message: string) {
+        super(message)
+        this.status = status; // Código de status HTTP
+    }
+}
+
+//Handler para as exceptions do tipo zod (formatação e tipagem)
+export class ZodException extends Error{
+
+    public message: string;
+    public status: number;
 
     constructor(error: any){
-        this.error = this.formatZodError(error)
+        super()
+        this.message = this.formatZodError(error)
+        this.status = HttpStatusCode.BadRequest
     }
 
     private formatZodError(error: ZodError): string {
@@ -16,10 +30,4 @@ export class ZodException{
         }).join(", ")
     }
 
-    public toResponse(): {status: HttpStatusCode, message: string} {
-        return {
-            status: HttpStatusCode.BadRequest,
-            message: this.error
-        }
-    }
 }

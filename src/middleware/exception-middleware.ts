@@ -5,6 +5,6 @@ export function ExceptionMiddleware(error: any, req: Request, res: Response, nex
     const status = error?.status || HttpStatusCode.InternalServerError
     const data = error?.message?.message || error?.message || "internal-server-error - check logs or call developer for more information"
 
-    console.error(`[Error]: ${data}`, { error })
+    // console.error(`[Error]: ${data}`, { error })
     res.status(status).json({data})
 }

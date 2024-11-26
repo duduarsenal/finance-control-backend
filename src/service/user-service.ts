@@ -4,6 +4,7 @@ import { UserRepository } from "@repositorys/user-repository";
 import { Types } from "mongoose";
 import { UserBusiness } from "@business/user-business";
 import BCRYPT from 'bcrypt'
+import { AppException } from "@errors";
 
 const _userRepository = new UserRepository()
 const _userBusiness = new UserBusiness()
@@ -36,9 +37,7 @@ export class UserService{
     async addUser(user: UserModel): Promise<{status: HttpStatusCode; data: string}>{
         try {
             const canAdd = await _userBusiness.canAddUser(user)
-            if(canAdd.status !== HttpStatusCode.OK){
-                throw ({status: canAdd.status, message: canAdd.message})
-            }
+            if(canAdd.status !== HttpStatusCode.OK) throw new AppException(canAdd.status, canAdd.message)
 
             const newUser = userSchema.parse(user)
             const hashPass = await BCRYPT.hash(newUser.senha, 12)
@@ -48,7 +47,7 @@ export class UserService{
             
             return ({status: HttpStatusCode.Created, data: "OK"})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
+            throw new AppException(error?.status ?? HttpStatusCode.InternalServerError, error.message)
         }
     }
 
@@ -56,7 +55,7 @@ export class UserService{
         try {
             const canUpd = await _userBusiness.canUpdUser(id, userUpdated)
             if(canUpd.status !== HttpStatusCode.OK){
-                throw ({status: canUpd.status, message: canUpd.message})
+                throw new AppException(canUpd.status, canUpd.message)
             }
 
             const userToUpdate = userSchema.parse(userUpdated)
@@ -67,7 +66,7 @@ export class UserService{
 
             return ({status: HttpStatusCode.OK, data: "OK"})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
+            throw new AppException(error?.status ?? HttpStatusCode.InternalServerError, error.message)
         }
     }
 
@@ -75,14 +74,14 @@ export class UserService{
         try {
             const canDel = await _userBusiness.canDelUser(id)
             if(canDel.status !== HttpStatusCode.OK){
-                throw ({status: canDel.status, message: canDel.message})
+                throw new AppException(canDel.status, canDel.message)
             }
 
             await _userRepository.delUser(id)
 
             return ({status: HttpStatusCode.OK, data: "OK"})
         } catch (error: any) {
-            throw ({status: error?.status ?? HttpStatusCode.InternalServerError, message: error})
+            throw new AppException(error?.status ?? HttpStatusCode.InternalServerError, error.message)
         }
     }
 }

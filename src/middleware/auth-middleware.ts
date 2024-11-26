@@ -1,36 +1,39 @@
 import { HttpExceptionMessage, HttpStatusCode } from "@enums";
 import { NextFunction, Request, Response } from "express";
-import JWT from 'jsonwebtoken'
+import JWT, { JsonWebTokenError } from 'jsonwebtoken'
 import { jwt_key } from '@configs/env'
 import { UserModel } from "@configs/zod";
 import { UserRepository } from "@repositorys/user-repository";
+import { AppException } from "@errors";
 
 const _userRepository = new UserRepository();
 
-export function AuthMiddleware(req: Request, res: Response, next: NextFunction){
+export async function AuthMiddleware(req: Request, res: Response, next: NextFunction){
     try {
         const { authorization } = req.headers
 
         if(!authorization || !authorization.includes("Bearer")) {
-            throw ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+            throw new AppException(HttpStatusCode.Unauthorized, HttpExceptionMessage.MissingToken)
         }
 
         const token = authorization.split("Bearer ")[1]
-        const isValidToken = JWT.verify(token, jwt_key)
-        if (!isValidToken) throw ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
-        
-        const tokenDecoded = JWT.decode(token, { json: true })
-        const userInfo: UserModel = tokenDecoded?.data
-        if(!userInfo) throw ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+        if(!token) throw new AppException(HttpStatusCode.Unauthorized, HttpExceptionMessage.MissingToken)
 
-        const isAtivoUser = _userRepository.getUserById(userInfo.id as string)
-        if(!isAtivoUser) throw ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+        const tokenDecoded = JWT.verify(token, jwt_key) as { data: UserModel }
+
+        const userInfo: UserModel = tokenDecoded?.data
+        if(!userInfo) throw new AppException(HttpStatusCode.Unauthorized, HttpExceptionMessage.CantParseToken)
+
+        const isAtivoUser = await _userRepository.getUserById(userInfo.id as string)
+        if(!isAtivoUser) throw new AppException(HttpStatusCode.Unauthorized, HttpExceptionMessage.UserNotFound)
 
         req.headers['user'] = userInfo.usuario
         next();
     } catch (error: any) {
-        console.error('Erro ao validar token', {message: error.message})
-        throw ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+        if(error instanceof JsonWebTokenError) {
+            next({...error, status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.CantParseToken})
+        }
+        next(error)
     }
 }
 

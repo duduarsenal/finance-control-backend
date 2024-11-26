@@ -18,6 +18,10 @@ export enum HttpExceptionMessage {
     MissingFields = "campos-obrigatorios-nao-preenchidos", //Campos obrigatorios em branco ou tamanho incorreto
     UsernameChanged = "nome-de-usuario-alterado", //Usuario enviado nao pode ser diferente do usuario cadastro no sistema baseado no ID
     EmptyId = "id-nao-preenchido", //Id enviado vazio ou nulo
-    Unauthorized = "nao-autorizado",
+    Unauthorized = "nao-autorizado", //Nao autorizado ao acesso
+    MissingToken = 'token-nao-encontrado', //Token nao encontrado nos headers
+    InvalidToken = 'token-invalido', //Token com formato invalido (diferente de um jwt)
+    CantParseToken = 'token-formato-invalido', //Nao foi possivel converter o token jwt para json
     InternalServerError = "erro-interno-servidor", //Erro interno do servidor
+    InvalidCredentials = 'credenciais-invalidas' //Credencias invalidas (usuario ou senha)
 }
