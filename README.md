@@ -55,7 +55,7 @@ O foco do projeto é:
     npm install
 3. Configure as variaveis de ambiente
     ```bash
-    Crie um arquivo .env com as configurações necessárias (exemplo disponível no repositório no arquivo .env.example)
+    Crie um arquivo .env com as configurações necessárias (exemplo disponível no repositório)
 4. Inicialização do banco de dados, com suas tabelas e relações
     ```bash
     npx prisma db push
