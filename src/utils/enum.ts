@@ -11,6 +11,7 @@ export enum HttpStatusCode {
 
 //Mensagens padronizadas para quaisquer exceptions do sistema
 export enum HttpExceptionMessage {
+    RouteNotFound = "rota-nao-encontrada",
     UserNotFound = "usuario-nao-encontrado", //Usuario nao encontrado e/ou nao existe
     UserAlreadyExists = "usuario-ja-existe", //Usuario ja cadastrado no sistema
     InvalidId = "id-invalido", //Id com formato invalido (diferente de Types.ObjectId)
@@ -24,4 +25,10 @@ export enum HttpExceptionMessage {
     CantParseToken = 'token-formato-invalido', //Nao foi possivel converter o token jwt para json
     InternalServerError = "erro-interno-servidor", //Erro interno do servidor
     InvalidCredentials = 'credenciais-invalidas' //Credencias invalidas (usuario ou senha)
+}
+
+export enum Roles {
+    ADMIN = "admin", //Role de administrador do sistema (geralmente faz tudo)
+    USER = "user", //Role de usuario do sistema (uso comum)
+    MODERATOR = "moderator" //Role de moderador do sistema (algumas permissoes extras)
 }

@@ -41,7 +41,8 @@ export class UserController {
         try {
             const { id } = req.params
             const user = req.body
-            const { status, data } = await _userService.updUser(id, user)
+            const userReq = req.headers['user'] as string
+            const { status, data } = await _userService.updUser(id, user, userReq)
 
             return res.status(status).json({data})
         } catch (error: any) {
@@ -51,8 +52,9 @@ export class UserController {
 
     async delUser(req: Request, res: Response, next: NextFunction): Promise<any>{
         try {
-            var { id } = req.params;
-            const { status, data} = await _userService.delUser(id)
+            const { id } = req.params;
+            const userReq = req.headers['user'] as string
+            const { status, data} = await _userService.delUser(id, userReq)
 
             return res.status(status).json({data})
         } catch (error: any) {

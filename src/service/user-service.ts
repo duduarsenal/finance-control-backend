@@ -51,9 +51,9 @@ export class UserService{
         }
     }
 
-    async updUser(id: string, userUpdated: UserModel): Promise<{status: HttpStatusCode; data: string}>{
+    async updUser(id: string, userUpdated: UserModel, userReq: string): Promise<{status: HttpStatusCode; data: string}>{
         try {
-            const canUpd = await _userBusiness.canUpdUser(id, userUpdated)
+            const canUpd = await _userBusiness.canUpdUser(id, userUpdated, userReq)
             if(canUpd.status !== HttpStatusCode.OK){
                 throw new AppException(canUpd.status, canUpd.message)
             }
@@ -70,9 +70,9 @@ export class UserService{
         }
     }
 
-    async delUser(id: string): Promise<{status: HttpStatusCode; data: string}>{
+    async delUser(id: string, userReq: string): Promise<{status: HttpStatusCode; data: string}>{
         try {
-            const canDel = await _userBusiness.canDelUser(id)
+            const canDel = await _userBusiness.canDelUser(id, userReq)
             if(canDel.status !== HttpStatusCode.OK){
                 throw new AppException(canDel.status, canDel.message)
             }

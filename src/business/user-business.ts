@@ -1,5 +1,5 @@
 import { UserModel, userSchema } from "@configs/zod";
-import { HttpExceptionMessage, HttpStatusCode } from "@enums";
+import { HttpExceptionMessage, HttpStatusCode, Roles } from "@enums";
 import { UserRepository } from "@repositorys/user-repository";
 import { Types } from "mongoose";
 import { ZodError } from "zod";
@@ -25,7 +25,7 @@ export class UserBusiness{
         }
     }
 
-    public async canUpdUser(id: string, {nome, senha, usuario}: UserModel): Promise<{status: HttpStatusCode, message: string}> {
+    public async canUpdUser(id: string, {nome, senha, usuario}: UserModel, userReq: string): Promise<{status: HttpStatusCode, message: string}> {
         try {
             userSchema.parse({nome, senha, usuario})
             if(!id) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.EmptyId})
@@ -33,6 +33,15 @@ export class UserBusiness{
 
             const user = await _userRepository.getUserById(id)
             if(!user) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.UserNotFound})
+
+            const userRequest = await _userRepository.getUserByUsuario(userReq)
+            if(!userRequest) return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+            if(userRequest.role.descricao !== Roles.ADMIN
+                && userRequest.role.descricao !== Roles.MODERATOR
+                && userRequest.usuario !== user.usuario) {
+                return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+            }
+
             if(user.usuario !== usuario) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.UsernameChanged})
             if(!usuario || !senha) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.MissingFields})
              
@@ -43,13 +52,21 @@ export class UserBusiness{
         }
     }
 
-    public async canDelUser(id: string): Promise<{status: HttpStatusCode, message: string}>{
+    public async canDelUser(id: string, userReq: string): Promise<{status: HttpStatusCode, message: string}>{
         try {
             if(!id) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.EmptyId})
             if(!Types.ObjectId.isValid(id)) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.InvalidId})
-
+            
             const user = await _userRepository.getUserById(id)
             if(!user) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.UserNotFound})
+
+            const userRequest = await _userRepository.getUserByUsuario(userReq)
+            if(!userRequest) return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+            
+            if(userRequest.role.descricao !== Roles.ADMIN
+                && userRequest.usuario !== user.usuario) {
+                return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+            }
 
             return ({status: HttpStatusCode.OK, message: "OK"})
         } catch (error: any) {

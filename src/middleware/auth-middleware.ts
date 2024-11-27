@@ -1,4 +1,4 @@
-import { HttpExceptionMessage, HttpStatusCode } from "@enums";
+import { HttpExceptionMessage, HttpStatusCode, Roles } from "@enums";
 import { NextFunction, Request, Response } from "express";
 import JWT, { JsonWebTokenError } from 'jsonwebtoken'
 import { jwt_key } from '@configs/env'
@@ -56,7 +56,7 @@ export async function AdminMiddleware(req: Request, res: Response, next: NextFun
         const isAtivoUser = await _userRepository.getUserById(userInfo.id as string)
         if(!isAtivoUser) throw new AppException(HttpStatusCode.Unauthorized, HttpExceptionMessage.UserNotFound)
 
-        if(isAtivoUser.role.descricao !== "admin") {
+        if(isAtivoUser.role.descricao !== Roles.ADMIN && isAtivoUser.role.descricao !== Roles.MODERATOR) {
             throw new AppException(HttpStatusCode.Unauthorized, HttpExceptionMessage.Unauthorized)
         }
 
