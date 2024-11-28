@@ -14,6 +14,7 @@ export enum HttpExceptionMessage {
     RouteNotFound = "rota-nao-encontrada",
     UserNotFound = "usuario-nao-encontrado", //Usuario nao encontrado e/ou nao existe
     CategoriaNotFound = "categoria-nao-encontrada", //Categoria nao encontrada e/ou nao existe
+    FieldNotFound = "campo-nao-encontrado", //Campo nao encontrado e/ou nao existe
     UserAlreadyExists = "usuario-ja-existe", //Usuario ja cadastrado no sistema
     CategoriaAlreadyExists = "categoria-ja-existe", //Categoria ja cadastrada no sistema
     InvalidId = "id-invalido", //Id com formato invalido (diferente de Types.ObjectId)
