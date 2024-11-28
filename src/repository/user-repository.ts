@@ -46,7 +46,7 @@ class UserRepository {
     }
 
     async getUserByUsuario(usuario: string){
-        return await userClient.findFirst({
+        return await userClient.findUnique({
             where: {
                 usuario,
                 ativo: 1

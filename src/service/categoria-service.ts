@@ -8,9 +8,9 @@ const _categoriaRepository = new CategoriaRepository()
 const _categoriaBusiness = new CategoriaBusiness()
 
 export class CategoriaService{
-    async getCategorias(): Promise<{status: HttpStatusCode, data: CategoriaModel[]}>{
+    async getCategorias(user: string): Promise<{status: HttpStatusCode, data: CategoriaModel[]}>{
         try {
-            var categorias: CategoriaModel[] =  await _categoriaRepository.getCategorias()
+            var categorias: CategoriaModel[] =  await _categoriaRepository.getCategoriasByUser(user)
             
             return ({status: HttpStatusCode.OK, data: categorias})
         } catch (error: any) {

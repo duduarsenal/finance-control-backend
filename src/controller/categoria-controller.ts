@@ -6,7 +6,8 @@ const _categoriaService = new CategoriaService()
 export class CategoriaController {
     async getCategorias(req: Request, res: Response, next: NextFunction): Promise<any>{
         try {
-            const {status, data} =  await _categoriaService.getCategorias()
+            const user = req.headers['user'] as string
+            const {status, data} =  await _categoriaService.getCategorias(user)
 
             return res.status(status).json({data})
         } catch (error: any) {

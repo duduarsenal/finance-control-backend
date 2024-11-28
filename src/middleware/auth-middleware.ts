@@ -1,9 +1,9 @@
+import { UserRepository } from "@repositorys/user-repository";
+import { UserModel } from "@configs/zod";
+import { jwt_key } from '@configs/env'
 import { HttpExceptionMessage, HttpStatusCode, Roles } from "@enums";
 import { NextFunction, Request, Response } from "express";
 import JWT, { JsonWebTokenError } from 'jsonwebtoken'
-import { jwt_key } from '@configs/env'
-import { UserModel } from "@configs/zod";
-import { UserRepository } from "@repositorys/user-repository";
 import { AppException } from "@errors";
 
 const _userRepository = new UserRepository();

@@ -19,7 +19,7 @@ export class CategoriaBusiness{
             const user = await _userRepository.getUserByUsuario(userReq)
             if(!user) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.UserNotFound})
 
-            const categoriaByDesc = await _categoriaRepository.getCategoriaByDescricaoUser(categoria.descricao, user.id)
+            const categoriaByDesc = await _categoriaRepository.getCategoriaByDescricaoUser(categoria.descricao, userReq)
             if(categoriaByDesc) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.CategoriaAlreadyExists})
             if(!categoria.descricao 
                 || !categoria.cor 

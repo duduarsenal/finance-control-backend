@@ -12,11 +12,12 @@ model user {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   // Data
   nome        String
-  usuario     String
+  usuario     String    @unique
   senha       String
   role        role      @relation(fields: [role_id], references: [id])
   role_id     String    @db.ObjectId
   categorias  categoria[]
+  fields      field[]
   // Log
   dt_add    DateTime? @default(now())
   dt_upd    DateTime? 
@@ -37,4 +38,19 @@ model categoria {
   emoji     String
   user      user      @relation(fields: [user_id], references: [id])
   user_id   String    @db.ObjectId
+  field     field[]
+}
+
+model field {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  data          DateTime
+  descricao     String
+  tipo          String
+  categoria     categoria @relation(fields: [categoria_id], references: [id])
+  categoria_id  String    @db.ObjectId
+  user          user      @relation(fields: [user_id], references: [id])
+  user_id       String    @db.ObjectId
+  parcelaTotal  Int
+  parcelaAtual  Int
+  valor         Float
 }
