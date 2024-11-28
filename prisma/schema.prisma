@@ -9,13 +9,14 @@ datasource db {
 
 model user {
   // Id
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   // Data
-  nome      String
-  usuario   String
-  senha     String
-  role      role      @relation(fields: [role_id], references: [id])
-  role_id   String    @db.ObjectId
+  nome        String
+  usuario     String
+  senha       String
+  role        role      @relation(fields: [role_id], references: [id])
+  role_id     String    @db.ObjectId
+  categorias  categoria[]
   // Log
   dt_add    DateTime? @default(now())
   dt_upd    DateTime? 
@@ -27,4 +28,13 @@ model role {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   descricao String    @unique
   user      user[]
+}
+
+model categoria {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  descricao String
+  cor       String
+  emoji     String
+  user      user      @relation(fields: [user_id], references: [id])
+  user_id   String    @db.ObjectId
 }

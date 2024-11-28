@@ -13,7 +13,9 @@ export enum HttpStatusCode {
 export enum HttpExceptionMessage {
     RouteNotFound = "rota-nao-encontrada",
     UserNotFound = "usuario-nao-encontrado", //Usuario nao encontrado e/ou nao existe
+    CategoriaNotFound = "categoria-nao-encontrada", //Categoria nao encontrada e/ou nao existe
     UserAlreadyExists = "usuario-ja-existe", //Usuario ja cadastrado no sistema
+    CategoriaAlreadyExists = "categoria-ja-existe", //Categoria ja cadastrada no sistema
     InvalidId = "id-invalido", //Id com formato invalido (diferente de Types.ObjectId)
     IdNotAllowed = "id-nao-permitido", //Id nao pode estar preenchido (POST ao adicionar novo registro)
     MissingFields = "campos-obrigatorios-nao-preenchidos", //Campos obrigatorios em branco ou tamanho incorreto
@@ -27,6 +29,7 @@ export enum HttpExceptionMessage {
     InvalidCredentials = 'credenciais-invalidas' //Credencias invalidas (usuario ou senha)
 }
 
+//ROLES do sistema para manipular permissoes nas rotas
 export enum Roles {
     ADMIN = "admin", //Role de administrador do sistema (geralmente faz tudo)
     USER = "user", //Role de usuario do sistema (uso comum)
