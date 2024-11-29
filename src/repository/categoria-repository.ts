@@ -16,7 +16,7 @@ export class CategoriaRepository{
     }
 
     async getCategoriaById(id: string){
-        return await categoriaClient.findFirst({
+        return await categoriaClient.findUnique({
             where: {
                 id
             }

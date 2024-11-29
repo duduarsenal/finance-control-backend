@@ -40,17 +40,6 @@ export class FieldController {
         }
     }
 
-    async updFieldDeleteParcela(req: Request, res: Response, next: NextFunction): Promise<any>{
-        try {
-            const {field_id, parcela} = req.body
-            const {status, data} = await _fieldService.updFieldDeleteParcela(field_id, parcela)
-
-            return res.status(status).json({data})
-        } catch (error: any) {
-            return next(error)
-        }
-    }
-
     async updFieldAlteraParcelas(req: Request, res: Response, next: NextFunction): Promise<any>{
         try {
             const field = req.body

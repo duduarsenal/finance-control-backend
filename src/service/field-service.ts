@@ -48,22 +48,12 @@ export class FieldService {
         }
     }
 
-    async updFieldDeleteParcela(fieldId: string, parcela: ParcelaModel): Promise<{status: HttpStatusCode, data: string}>{
-        try {
-            await _fieldRepository.delParcelaByIdField(fieldId, parcela)
-
-            return({status: HttpStatusCode.OK, data: "OK"})
-        } catch (error: any) {
-            throw new AppException(error?.status ?? HttpStatusCode.InternalServerError, error.message)
-        }
-    }
-
     async updFieldAlteraParcelas(field: FieldModel, usuario: string): Promise<{status: HttpStatusCode, data: string}>{
         try {
-            const canUpd = await _fieldBusiness.canUpdField(field, usuario)
+            const canUpd = await _fieldBusiness.canUpdField(field, usuario, true)
             if(canUpd.status !== HttpStatusCode.OK) throw new AppException(canUpd.status, canUpd.message)
 
-            await _fieldRepository.delParcelasByIdField(field.id as string) 
+            await _fieldRepository.delParcelasByIdField(field.id as string)
             await _fieldRepository.updField(field)
             await _fieldRepository.addParcelasByIdField(field.parcelas, field.id as string)
 
@@ -78,6 +68,7 @@ export class FieldService {
             const canDel = await _fieldBusiness.canDelField(fieldId, usuario)
             if(canDel.status !== HttpStatusCode.OK) throw new AppException(canDel.status, canDel.message)
 
+            await _fieldRepository.delParcelasByIdField(fieldId)
             await _fieldRepository.delField(fieldId)
 
             return({status: HttpStatusCode.OK, data: "OK"})

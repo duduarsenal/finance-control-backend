@@ -55,6 +55,14 @@ export class FieldRepository{
         })
     }
 
+    async getParcelaById(parcelaId: string){
+        return await parcelaClient.findUnique({
+            where: {
+                id: parcelaId
+            }
+        })
+    }
+
     async addField(field: FieldModel, usuario: string){
         const user = await userClient.findUnique({
             where: {
@@ -112,11 +120,10 @@ export class FieldRepository{
         })
     }
 
-    async delParcelaByIdField(fieldId: string, parcela: ParcelaModel){
-        return await parcelaClient.delete({
+    async delParcelasByIdField(fieldId: string){
+        return await parcelaClient.deleteMany({
             where: {
-                field_id: fieldId,
-                id: parcela.id
+                field_id: fieldId
             }
         })
     }
@@ -131,14 +138,6 @@ export class FieldRepository{
                     field_id: fieldId
                 })
             })
-        })
-    }
-
-    async delParcelasByIdField(fieldId: string){
-        return await parcelaClient.deleteMany({
-            where: {
-                field_id: fieldId
-            }
         })
     }
 

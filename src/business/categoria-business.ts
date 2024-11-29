@@ -14,18 +14,13 @@ export class CategoriaBusiness{
     public async canAddCategoria(categoria: CategoriaModel, userReq: string): Promise<{status: HttpStatusCode, message: string}>{
         try {
             categoriaSchema.parse(categoria)
-            if(categoria.id) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.IdNotAllowed})
-
-            const user = await _userRepository.getUserByUsuario(userReq)
-            if(!user) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.UserNotFound})
-
+            
             const categoriaByDesc = await _categoriaRepository.getCategoriaByDescricaoUser(categoria.descricao, userReq)
             if(categoriaByDesc) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.CategoriaAlreadyExists})
             if(!categoria.descricao 
                 || !categoria.cor 
-                || !categoria.emoji) {
-                    return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.MissingFields})
-            }
+                || !categoria.emoji
+            ) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.MissingFields})
             
             return ({status: HttpStatusCode.OK, message: "OK"})
         } catch (error: any) {
