@@ -27,6 +27,19 @@ export class CategoriaController {
         }
     }
 
+    async updCategoria(req: Request, res: Response, next: NextFunction): Promise<any>{
+        try {
+            const categoria = req.body
+            const { id } = req.params
+            const user = req.headers['user'] as string
+            const {status, data} = await _categoriaService.updCategoria(id, categoria, user)
+
+            return res.status(status).json({data})
+        } catch (error: any) {
+            return next(error)
+        }
+    }
+
     async delCategoria(req: Request, res: Response, next: NextFunction): Promise<any>{
         try {
             const { id } = req.params;

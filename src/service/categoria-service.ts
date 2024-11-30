@@ -32,6 +32,19 @@ export class CategoriaService{
         }
     }
 
+    async updCategoria(id: string, categoria: CategoriaModel, user: string): Promise<{status: HttpStatusCode, data: string}>{
+        try {
+            const canUpd = await _categoriaBusiness.canUpdCategoria(id, categoria, user)
+            if(canUpd.status !== HttpStatusCode.OK) throw new AppException(canUpd.status, canUpd.message)
+
+            await _categoriaRepository.updCategoria(id, categoria)
+
+            return ({status: HttpStatusCode.OK, data: "OK"})
+        } catch (error: any) {
+            throw new AppException(error?.status ?? HttpStatusCode.InternalServerError, error.message)
+        }
+    }
+
     async delCategoria(id: string, user: string): Promise<{status: HttpStatusCode, data: string}>{
         try {
             const canDel = await _categoriaBusiness.canDelCategoria(id, user)

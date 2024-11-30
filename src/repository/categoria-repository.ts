@@ -49,6 +49,19 @@ export class CategoriaRepository{
         })
     }
 
+    async updCategoria(id: string, categoria: CategoriaModel) {
+        return await categoriaClient.update({
+            data: {
+                descricao: categoria.descricao,
+                cor: categoria.cor,
+                emoji: categoria.emoji
+            },
+            where: {
+                id
+            }
+        })
+    }
+
     async delCategoria(id: string){
         return await categoriaClient.delete({
             where: {

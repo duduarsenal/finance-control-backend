@@ -29,6 +29,31 @@ export class CategoriaBusiness{
         }
     }
 
+    public async canUpdCategoria(id: string, categoria: CategoriaModel, usuario: string): Promise<{status: HttpStatusCode, message: string}>{
+        try {
+            categoriaSchema.parse(categoria)
+            if(!id) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.EmptyId})
+            if(!Types.ObjectId.isValid(id)) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.InvalidId})
+
+            const categoriaExists = await _categoriaRepository.getCategoriaById(id)
+            if(!categoriaExists) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.CategoriaNotFound})
+
+            const userRequest = await _userRepository.getUserByUsuario(usuario)
+            if(!userRequest) return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+
+            if(userRequest.role.descricao !== Roles.ADMIN
+                && userRequest.role.descricao !== Roles.MODERATOR
+                && userRequest.id !== categoriaExists.user_id) {
+                return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
+            }
+            
+            return ({status: HttpStatusCode.OK, message: "OK"})
+        } catch (error: any) {
+            if(error instanceof ZodError) return new ZodException(error)
+            return ({status: HttpStatusCode.InternalServerError, message: error.message})
+        }
+    }
+
     public async canDelCategoria(id: string, userReq: string): Promise<{status: HttpStatusCode, message: string}>{
         try {
             if(!id) return ({status: HttpStatusCode.BadRequest, message: HttpExceptionMessage.EmptyId})
@@ -41,6 +66,7 @@ export class CategoriaBusiness{
             if(!userRequest) return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
             
             if(userRequest.role.descricao !== Roles.ADMIN
+                && userRequest.role.descricao !== Roles.MODERATOR
                 && userRequest.id !== categoria.user_id) {
                 return ({status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.Unauthorized})
             }
