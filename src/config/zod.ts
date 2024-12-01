@@ -52,3 +52,49 @@ export const parcelaSchema = z.object({
     valor: z.number().min(0.01, "Valor da Parcela deve ser no minimo de R$0.01")
 })
 export type ParcelaModel = z.infer<typeof parcelaSchema>
+
+const graphicsSchema = z.object({
+    byYear: z.array(
+        z.object({
+            id: z.string(), //Ano do item
+            items: z.object({ //Cada item do ano
+                gasto: z.array(z.object({
+                    tipo: z.string(), //Tipo do item (gastos ou ganhos)
+                    mes: z.object({ //Mes do item
+                        label: z.string(), //Label do mes (Jan, Fev, Abr)
+                        value: z.string() //Value do mes (01, 02, 03)
+                    }),
+                    valor: z.number() //Valor do item naquele mes
+                })),
+                ganho: z.array(z.object({
+                    tipo: z.string(), //Tipo do item (gastos ou ganhos)
+                    mes: z.object({ //Mes do item
+                        label: z.string(), //Label do mes (Jan, Fev, Abr)
+                        value: z.string() //Value do mes (01, 02, 03)
+                    }),
+                    valor: z.number() //Valor do item naquele mes
+                })),
+            })
+        })
+    ),
+    byMonth: z.object({
+        ganho: z.array(z.object({
+            tipo: z.string(), //Tipo do item (gastos ou ganhos)
+            mes: z.object({ //Mes do item
+                label: z.string(), //Label do mes (Jan, Fev, Abr)
+                value: z.string() //Value do mes (01, 02, 03)
+            }),
+            valor: z.number()
+        })),
+        gasto: z.array(z.object({
+            tipo: z.string(), //Tipo do item (gastos ou ganhos)
+            mes: z.object({ //Mes do item
+                label: z.string(), //Label do mes (Jan, Fev, Abr)
+                value: z.string() //Value do mes (01, 02, 03)
+            }),
+            valor: z.number()
+        })),
+    })
+})
+
+export type GraphicsModel = z.infer<typeof graphicsSchema>

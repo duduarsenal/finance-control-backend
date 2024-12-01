@@ -1,5 +1,5 @@
 import { FieldBusiness } from "@business/field-business";
-import { FieldModel, fieldSchema, ParcelaModel } from "@configs/zod";
+import { FieldModel, GraphicsModel, ParcelaModel } from "@configs/zod";
 import { HttpStatusCode } from "@enums";
 import { AppException } from "@errors";
 import { FieldRepository } from "@repositorys/field-repository";
@@ -9,11 +9,12 @@ const _fieldBusiness = new FieldBusiness()
 
 export class FieldService {
 
-    async getFields(usuario: string): Promise<{status: HttpStatusCode, data: FieldModel[]}>{
+    async getFields(usuario: string): Promise<{status: HttpStatusCode, data: {fields: FieldModel[], graphics: GraphicsModel}}>{
         try {
             const fields: FieldModel[] = await _fieldRepository.getFieldsByUser(usuario)
+            const graphics: GraphicsModel = this.getGraphicsData(fields);
 
-            return({status: HttpStatusCode.OK, data: fields})
+            return({status: HttpStatusCode.OK, data: {fields, graphics}})
         } catch (error: any) {
             throw new AppException(error?.status ?? HttpStatusCode.InternalServerError, error.message)
         }
@@ -75,5 +76,80 @@ export class FieldService {
         } catch (error: any) {
             throw new AppException(error?.status ?? HttpStatusCode.InternalServerError, error.message)
         }
+    }
+
+    private getGraphicsData(fields: FieldModel[]){
+        const graphics: {
+            byYear: {
+                id: string;
+                items: {
+                    gasto: { tipo: string; mes: { label: string; value: string }; valor: number }[];
+                    ganho: { tipo: string; mes: { label: string; value: string }; valor: number }[];
+                };
+            }[];
+            byMonth: {
+                gasto: { tipo: string; mes: { label: string; value: string }; valor: number }[];
+                ganho: { tipo: string; mes: { label: string; value: string }; valor: number }[];
+            };
+        } = { byYear: [], byMonth: { gasto: [], ganho: [] } };
+
+        fields.forEach((field: FieldModel) => {
+            field.parcelas.forEach((parcela: ParcelaModel) => {
+                const [ano, mes] = parcela.data.split("-")
+                var yearData = graphics.byYear.find((year: any) => year.id === ano)
+
+                if(!yearData){
+                    yearData = {
+                        id: ano,
+                        items: { gasto: [], ganho: [] }
+                    }
+
+                    graphics.byYear.push(yearData)
+                }
+
+                const itemsArray = yearData.items[field.tipo as keyof typeof yearData.items]
+
+                const yearMonthData = itemsArray.find((item) => item.mes.value === mes)
+                if(yearMonthData){
+                    yearMonthData.valor += parcela.valor
+                } else {
+                    itemsArray.push({
+                        tipo: field.tipo,
+                        mes: {
+                            label: "TO-DO",
+                            value: mes
+                        },
+                        valor: parcela.valor
+                    })
+                }
+
+                const byMonthsArray = graphics.byMonth[field.tipo as keyof typeof graphics.byMonth]
+                const monthData = byMonthsArray.find((item) => item.mes.value === mes)
+
+                if(monthData) {
+                    monthData.valor += parcela.valor
+                } else {
+                    byMonthsArray.push({
+                        tipo: field.tipo,
+                        mes: {
+                            label: "TO-DO",
+                            value: mes
+                        },
+                        valor: parcela.valor
+                    })
+                }
+            })
+        })
+
+        graphics.byYear.forEach((year) => {
+            year.items.gasto.sort((a, b) => a.mes.value.localeCompare(b.mes.value))
+            year.items.ganho.sort((a, b) => a.mes.value.localeCompare(b.mes.value))
+        })
+        graphics.byYear.sort((a, b) => a.id.localeCompare(b.id))
+
+        graphics.byMonth.gasto.sort((a, b) => a.mes.value.localeCompare(b.mes.value))
+        graphics.byMonth.ganho.sort((a, b) => a.mes.value.localeCompare(b.mes.value))
+
+        return graphics
     }
 }
