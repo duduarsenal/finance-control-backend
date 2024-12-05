@@ -29,7 +29,7 @@ export enum HttpExceptionMessage {
     Unauthorized = "nao-autorizado", //Nao autorizado ao acesso
     MissingToken = 'token-nao-encontrado', //Token nao encontrado nos headers
     InvalidToken = 'token-invalido', //Token com formato invalido (diferente de um jwt)
-    CantParseToken = 'token-formato-invalido', //Nao foi possivel converter o token jwt para json
+    CantParseToken = 'token-invalido', //Nao foi possivel converter o token jwt para json
     InternalServerError = "erro-interno-servidor", //Erro interno do servidor
     InvalidCredentials = 'credenciais-invalidas' //Credencias invalidas (usuario ou senha)
 }
@@ -39,4 +39,20 @@ export enum Roles {
     ADMIN = "admin", //Role de administrador do sistema (geralmente faz tudo)
     USER = "user", //Role de usuario do sistema (uso comum)
     MODERATOR = "moderator" //Role de moderador do sistema (algumas permissoes extras)
+}
+
+//Meses do ano para atribuicao ao gerar dados de grafico
+export enum Months {
+    Janeiro = 1,
+    Fevereiro = 2,
+    Marco = 3,
+    Abril = 4,
+    Maio = 5,
+    Junho = 6,
+    Julho = 7,
+    Agosto = 8,
+    Setembro = 9,
+    Outubro = 10,
+    Novembro = 11,
+    Dezembro = 12
 }

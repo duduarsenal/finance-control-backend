@@ -64,7 +64,7 @@ export async function AdminMiddleware(req: Request, res: Response, next: NextFun
         next();
     } catch (error: any) {
         if(error instanceof JsonWebTokenError) {
-            next({...error, status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.CantParseToken})
+            next({...error, status: HttpStatusCode.Unauthorized, message: HttpExceptionMessage.InvalidToken})
         }
         next(error)
     }

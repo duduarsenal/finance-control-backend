@@ -1,6 +1,6 @@
 import { FieldBusiness } from "@business/field-business";
 import { FieldModel, GraphicsModel, ParcelaModel } from "@configs/zod";
-import { HttpStatusCode } from "@enums";
+import { HttpStatusCode, Months } from "@enums";
 import { AppException } from "@errors";
 import { FieldRepository } from "@repositorys/field-repository";
 
@@ -116,7 +116,7 @@ export class FieldService {
                     itemsArray.push({
                         tipo: field.tipo,
                         mes: {
-                            label: "TO-DO",
+                            label: Months[Number(mes)],
                             value: mes
                         },
                         valor: parcela.valor
@@ -132,7 +132,7 @@ export class FieldService {
                     byMonthsArray.push({
                         tipo: field.tipo,
                         mes: {
-                            label: "TO-DO",
+                            label: Months[Number(mes)],
                             value: mes
                         },
                         valor: parcela.valor
