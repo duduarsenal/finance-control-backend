@@ -51,6 +51,8 @@ model field {
   user_id       String    @db.ObjectId
   parcelas      parcela[]
   total         Float
+  status      	Boolean   @default(false)
+  ativo      	  Boolean   @default(true)
 }
 
 model parcela {

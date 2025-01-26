@@ -7,6 +7,7 @@ const parcelaClient = new PrismaClient().parcela
 
 export class FieldRepository{
 
+    // USE CASE FIELDS
     async getFieldById(fieldId: string){
         return await fieldClient.findUnique({
             where: {
@@ -27,6 +28,8 @@ export class FieldRepository{
                 descricao: true,
                 tipo: true,
                 total: true,
+                status: true,
+                ativo: true,
                 parcelas: {
                     select: {
                         id: true,
@@ -55,14 +58,6 @@ export class FieldRepository{
         })
     }
 
-    async getParcelaById(parcelaId: string){
-        return await parcelaClient.findUnique({
-            where: {
-                id: parcelaId
-            }
-        })
-    }
-
     async addField(field: FieldModel, usuario: string){
         const user = await userClient.findUnique({
             where: {
@@ -76,6 +71,8 @@ export class FieldRepository{
                 descricao: field.descricao,
                 tipo: field.tipo,
                 total: field.total,
+                status: field.status,
+                ativo: field.ativo,
                 categoria_id: field.categoria.id,
                 user_id: user?.id as string,
                 parcelas: {
@@ -102,7 +99,26 @@ export class FieldRepository{
                 descricao: field.descricao,
                 tipo: field.tipo,
                 total: field.total,
+                status: field.status,
+                ativo: field.ativo,
                 categoria_id: field.categoria.id
+            }
+        })
+    }
+
+    async delField(fieldId: string){
+        return await fieldClient.delete({
+            where: {
+                id: fieldId
+            }
+        })
+    }
+
+    // USE CASE PARCELAS
+    async getParcelaById(parcelaId: string){
+        return await parcelaClient.findUnique({
+            where: {
+                id: parcelaId
             }
         })
     }
@@ -138,14 +154,6 @@ export class FieldRepository{
                     field_id: fieldId
                 })
             })
-        })
-    }
-
-    async delField(fieldId: string){
-        return await fieldClient.delete({
-            where: {
-                id: fieldId
-            }
         })
     }
     

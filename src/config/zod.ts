@@ -29,6 +29,8 @@ export const fieldSchema = z.object({
     id: z.string().optional(),
     descricao: z.string({message: "Descricao do campo é obrigatório"}),
     tipo: z.string({message: "Tipo do campo é obrigatório"}),
+    status: z.boolean().default(false),
+    ativo: z.boolean().default(true),
     categoria: z.object({
         id: z.string({message: "ID da categoria é um campo obrigatório"}),
         descricao: z.string().optional(),
