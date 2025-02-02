@@ -1,3 +1,4 @@
+import './paths';
 import express from 'express'
 import cors from 'cors'
 import { serverRoutes } from '@routes/server-routes'
