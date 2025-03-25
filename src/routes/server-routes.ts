@@ -13,6 +13,6 @@ serverRoutes.use("/user", userRoute)
 serverRoutes.use("/categoria", AuthMiddleware, categoriaRoute)
 serverRoutes.use("/field", AuthMiddleware, fieldRoute)
 
-serverRoutes.use("*", errorRoute)
+serverRoutes.use("*", errorRoute) //Rota inexistente das listadas acima
 
 export { serverRoutes }
